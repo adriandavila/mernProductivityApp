@@ -10,11 +10,18 @@
     <title>Productive</title>
 </head>
 <body>
+    {{> _header}}
     <div class="container">
         {{{body}}}
     </div>
     
-
+    {{!-- Materialize --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    {{!-- Initializing materialize elements --}}
+    <script>
+        M.Sidenav.init(document.querySelector('.sidenav'))
+    </script>
+    
 </body>
 </html>
