@@ -7,6 +7,7 @@ const ScheduleSchema = new mongoose.Schema({
     },
     quoteOfTheDay: {
         type: String,
+        default: '...'
     },
     tasks: {
         type: Array,
