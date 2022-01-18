@@ -1,0 +1,29 @@
+<h1>Daily Schedule</h1>
+<div class="row">
+    {{#each schedules}}
+        <div class="col s12 m4">
+            <div class="card">
+                <div class="card-image">
+                    {{{editIcon user ../user _id}}}
+                </div>
+                <div class="card-content center-align">
+                    <h5>{{formatDate day 'MMMM Do YYYY'}}</h5>
+
+                    <p>{{truncate (formatTasks tasks) 125}}</p>
+
+                    <br>
+                    <div class="chip">
+                        <img src="{{user.image}}" alt="User image">
+                        <a href="/schedule/user/{{user._id}}">{{user.displayName}}</a>
+                    </div>
+
+                </div>
+                <div class="card-action center-align">
+                    <a href="/schedule/{{_id}}" class="btn">Expand</a>
+                </div>
+            </div>
+        </div>
+    {{else}}
+        <p>No schedules to display</p>
+    {{/each}}
+</div>

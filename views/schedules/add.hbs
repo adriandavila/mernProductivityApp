@@ -45,7 +45,7 @@
                         document.getElementById("task").value=""   
 
                         var currentTasks = document.getElementById("tasks").value;
-                        currentTasks = currentTasks.concat("; ", taskValue, " *.*incomplete")
+                        currentTasks = {currentTasks.concat("; ", taskValue, " *.*incomplete")}
                         document.getElementById("tasks").value=currentTasks
                         
                     }
@@ -61,7 +61,7 @@
                     {{!-- <li><text style="padding: 10pt;">Meet George</text><button type="button" id="delTask" class="" onclick="deleteTask()"><i class="fas fa-trash"></i></button></li> --}}
                 </ul>
                 <input type="text" id="tasks" name="tasks" value="" style="display: none;">
-                {{!-- Put script here maybe? who knows, we'll have to figure it out --}}
+
                 
             </div>
         </div>
@@ -73,7 +73,7 @@
         {{!-- Save button --}}
         <div class="row">
             <input type="submit" value="Save" class="btn">
-            <a href="/dashboard" class="btn orange">Cancel</a>
+            <a href="/schedule" class="btn orange">Cancel</a>
         </div>
     </form>
 </div>

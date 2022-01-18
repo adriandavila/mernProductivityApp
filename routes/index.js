@@ -16,7 +16,7 @@ router.get('/', ensureGuest, (req, res) => {
 // @route   GET /dashboard
 router.get('/archive', ensureAuth, async (req, res) => {
     try {
-        const allSchedules = await Schedule.find({ user: req.user.id }).lean()
+        const allSchedules = await Schedule.find({ user: req.user.id }).sort({ day: 'desc' }).lean()
         console.log(allSchedules)
         res.render('archive', {
             name: req.user.firstName,

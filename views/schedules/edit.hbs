@@ -1,0 +1,84 @@
+
+
+<h3>Create Daily Schedule</h3>
+<div class="row">
+    <form action="/schedule" method="POST" class="col s12">
+        {{!-- Inputting the date --}}
+        <div class="row">
+            <div class="input-field">
+                <input type="date" id="day" name="day" value="{{getDate day}}">
+                <label for="day">Date</label>
+            </div>
+        </div>
+
+        {{!-- Status (shown//archived) --}}
+        <div class="row">
+            <div class="input-field">
+                <select name="status" id="status">
+                    {{#select story.status}}
+                    <option value="shown">Shown</option>
+                    <option value="archived">Archived</option>
+                    {{/select}}
+                </select>
+                <label for="status">Status</label>
+            </div>
+        </div>
+
+        {{!-- Tasks --}}
+        {{#if schedule.tasks}}
+            {{#each schedule.tasks}}
+                <div class="row">
+                    <div class="card" style="margin: 0px !important;">
+                        <div class="card-content" style="padding: 15px 20px !important; display: flex;">
+                            <div class="task" style="flex-grow: 1;">
+                                <script>
+                                    checkTask = function(noWsTask, task){
+                                        console.log("Checking task: ", task)
+                                        cbox = document.getElementById('btn-'.concat(noWsTask))
+                                        txt = document.getElementById('txt-'.concat(noWsTask))
+
+                                        if(cbox.checked) {
+                                            txt.style="text-decoration: line-through;"
+                                            
+                                        } else {
+                                            txt.style="color: #404040; text-decoration: none;"
+
+                                        }
+                                    }
+                                    trash = function(task) {
+                                        console.log("Trashing: ", task)
+                                    }
+                                </script>
+                                <label>
+                                    {{#if (isComplete status)}}
+                                        <input type="checkbox" checked="checked" id="btn-{{removeWhitespace task}}" onChange="checkTask('{{removeWhitespace task}}', '{{task}}')"/>
+                                        <span style="text-decoration: line-through;" id="txt-{{removeWhitespace task}}">{{task}}</span>
+                                    {{else}}
+                                        <input type="checkbox" id="btn-{{removeWhitespace task}}" onChange="checkTask('{{removeWhitespace task}}', '{{task}}')"/>
+                                        <span id="txt-{{removeWhitespace task}}" style="color: #404040; text-decoration: none;" >{{task}}</span>
+                                    {{/if}}
+                                </label>
+                                
+                            </div> 
+                            <div class="trash" style="">
+                                <i class="fas fa-trash" style="color: #0492C2; cursor: pointer;" onClick="trash('{{task}}')"></i>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    
+                </div>
+            {{/each}}
+        {{else}}
+        <p>No tasks to display</p>
+        {{/if}}
+
+
+        {{!-- Save button --}}
+        <div class="row">
+            <input type="submit" value="Save" class="btn">
+            <a href="/schedule" class="btn orange">Cancel</a>
+        </div>
+    </form>
+</div>
