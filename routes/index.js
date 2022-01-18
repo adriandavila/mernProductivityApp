@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
+const Schedule = require('../models/Schedule')
+
 // @desc    Login/Landing page
 // @route   GET /
 router.get('/', ensureGuest, (req, res) => {
@@ -12,16 +14,27 @@ router.get('/', ensureGuest, (req, res) => {
 
 // @desc    Dashboard
 // @route   GET /dashboard
-router.get('/dashboard', ensureAuth, (req, res) => {
-    console.log(req.user)
-    res.render('dashboard')
+router.get('/archive', ensureAuth, async (req, res) => {
+    try {
+        const allSchedules = await Schedule.find({ user: req.user.id }).lean()
+        console.log(allSchedules)
+        res.render('archive', {
+            name: req.user.firstName,
+            allSchedules
+        })
+    } catch (err) {
+        console.error(err)
+        res.render('error/500')
+    }
 })
+
+
 
 // @desc    Daily Schedule
 // @route   GET /schedule
-router.get('/schedule', (req, res) => {
-    res.render('schedule')
-})
+// router.get('/schedule', (req, res) => {
+//     res.render('schedule')
+// })
 
 
 module.exports = router

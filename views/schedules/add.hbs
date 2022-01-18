@@ -1,0 +1,79 @@
+<h3>Create Daily Schedule</h3>
+<div class="row">
+    <form action="/schedule" method="POST" class="col s12">
+        {{!-- Inputting the date --}}
+        <div class="row">
+            <div class="input-field">
+                <input type="date" id="day" name="day">
+                <label for="day">Date</label>
+            </div>
+        </div>
+
+        {{!-- Archiving the day --}}
+        <div class="row">
+            <div class="input-field">
+                <select name="status" id="status">
+                    <option value="shown" selected>Shown</option>
+                    <option value="archived">Archived</option>
+                </select>
+                <label for="status">Status</label>
+            </div>
+        </div>
+
+        {{!-- Inputting Tasks --}}
+        <div class="row">
+            <div class="input-field">
+                <h5>Add your tasks:</h5>
+                
+                <script>
+                    createTask = function() {         
+                        var node = document.createElement("li");                 // Create a <li> node
+                        var label = document.createElement("text")
+                        var deleteButton = document.createElement("button");//delete button
+
+                        taskValue = document.getElementById('task').value;
+                        label.innerHTML = taskValue;
+                        label.style = "margin-top: 10pt; padding: 10pt;"
+                        deleteButton.className="fas fa-trash";
+                        deleteButton.type="button";
+                        deleteButton.onclick="deleteTask()"
+
+                        node.appendChild(label);                              // Append the text to <li>
+                        node.appendChild(deleteButton)
+
+                        document.getElementById("todoList").appendChild(node);     // Append <li> to <ul> with id="myList"
+                        document.getElementById("task").value=""   
+
+                        var currentTasks = document.getElementById("tasks").value;
+                        currentTasks = currentTasks.concat("; ", taskValue, " *.*incomplete")
+                        document.getElementById("tasks").value=currentTasks
+                        
+                    }
+
+                </script>
+
+
+                <input type="text" class="form-control" placeholder="Enter here..." id="task" autofocus>
+                <span class="input-group-btn">
+                    <button id="create" class="btn btn-primary" type="button" name="submit" onclick="createTask()">Add Task</button>
+                </span>
+                <ul id="todoList">
+                    {{!-- <li><text style="padding: 10pt;">Meet George</text><button type="button" id="delTask" class="" onclick="deleteTask()"><i class="fas fa-trash"></i></button></li> --}}
+                </ul>
+                <input type="text" id="tasks" name="tasks" value="" style="display: none;">
+                {{!-- Put script here maybe? who knows, we'll have to figure it out --}}
+                
+            </div>
+        </div>
+
+
+
+
+
+        {{!-- Save button --}}
+        <div class="row">
+            <input type="submit" value="Save" class="btn">
+            <a href="/dashboard" class="btn orange">Cancel</a>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,27 @@
+<h6>Archive</h6>
+<h3>Welcome, {{name}}</h3>
+<p>Here is your archive</p>
+
+{{#if allSchedules}}
+    <table class="striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Status</th>
+                <th></th> 
+            </tr>
+        </thead>
+        <tbody>
+            {{#each allSchedules}}
+                <tr>
+                    <td><a href="/schedule/{{_id}}"></a>{{day}}</td>
+                    <td><span class="dash-status">{{status}}</span></td>
+                    <td></td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+{{else}}
+    <p>You have not added anything to your schedule.</p>
+
+{{/if}}
