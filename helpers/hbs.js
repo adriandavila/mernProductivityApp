@@ -17,12 +17,12 @@ module.exports = {
         }
         return str
     },
-    editIcon: function (storyUser, loggedUser, storyId, floating = true) {
-        if (storyUser._id.toString() == loggedUser._id.toString()) {
+    editIcon: function (scheduleUser, loggedUser, schedleId, floating = true) {
+        if (scheduleUser._id.toString() == loggedUser._id.toString()) {
             if (floating) {
-                return `<a href="/schedule/edit/${storyId}" class="btn-floating halfway-fab blue"><i class="fas fa-edit fa-small"></i></a>`
+                return `<a href="/schedule/edit/${schedleId}" class="btn-floating halfway-fab blue"><i class="fas fa-edit fa-small"></i></a>`
             } else {
-                return `<a href="/schedule/edit/${storyId}><i class="fas fa-edit"></i></a>`
+                return `<a href="/schedule/edit/${schedleId}><i class="fas fa-edit"></i></a>`
             }
         } else {
             return ''

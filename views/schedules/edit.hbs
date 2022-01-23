@@ -67,7 +67,6 @@
                                             })
                                         }
 
-
                                         taskList = tskList.map(function(element)  {
                                             return element.task.concat("*.*", element.status, "; ")
                                         })
@@ -94,7 +93,6 @@
                                             }
                                         })
 
-                                        // FUNCTIONALITY HERE
                                         var updatedList = []
                                         tskList.forEach(tsk => {
                                             if(tsk.task != task) {
@@ -108,7 +106,6 @@
                                         var s = updatedList.join('')
                                         console.log("S: ", s)
                                         document.getElementById('tasks').value=s
-                                        
                                     }
 
                                 </script>
