@@ -44,15 +44,37 @@ module.exports = {
         return (input=="complete")
     },
     getDate: function (date) {
-        var year = moment(date).format('YYYY')
-        var month = moment(date).format('MM')
-        var day = moment(date).format("DD")
-        return year.concat("-",month,"-",day)
+        // var year = moment(date).format('YYYY')
+        // var month = moment(date).format('MM')
+        // var day = moment(date).format("DD")
+        return moment(date).format('YYYY-MM-DD')
     },
     chkTask: function (task) {
         console.log("beep")
     }, 
     removeWhitespace: function(s) {
-        return s.replace(/\s+/g, '')
+        try {
+            return s.replace(/\s+/g, '')
+        } catch (err) {
+            return s
+        }
+    },
+    getTaskList: function() {
+        var lst = document.getElementById("task").getElementsByTagName("span")
+
+        return lst
+    }, parseTasks: function(taskList) {
+        try {
+            //console.log(taskList)
+            taskList = taskList.map(function(element)  {
+                return element.task.concat("*.*", element.status, "; ")
+            })
+            //console.log(taskList)
+            var s = taskList.join('')
+            return s
+        } catch(err) {
+            console.error("Error parsing tasks")
+            return "Error"
+        }
     }
 }

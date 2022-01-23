@@ -1,4 +1,5 @@
 const express = require('express')
+const res = require('express/lib/response')
 const router = express.Router()
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -12,8 +13,8 @@ router.get('/', ensureGuest, (req, res) => {
     })
 })
 
-// @desc    Dashboard
-// @route   GET /dashboard
+// @desc    Archive
+// @route   GET /archive
 router.get('/archive', ensureAuth, async (req, res) => {
     try {
         const allSchedules = await Schedule.find({ user: req.user.id }).sort({ day: 'desc' }).lean()
@@ -27,7 +28,6 @@ router.get('/archive', ensureAuth, async (req, res) => {
         res.render('error/500')
     }
 })
-
 
 
 // @desc    Daily Schedule

@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const ScheduleSchema = new mongoose.Schema({
     day: {
         type: Date,
-        default: Date.now
     },
     quoteOfTheDay: {
         type: String,

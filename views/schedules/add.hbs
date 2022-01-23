@@ -26,6 +26,9 @@
                 <h5>Add your tasks:</h5>
                 
                 <script>
+                    removeWhitespace = function(s) {
+                        return s.replace(/\s+/g, '')
+                    }
                     createTask = function() {         
                         var node = document.createElement("li");                 // Create a <li> node
                         var label = document.createElement("text")
@@ -34,10 +37,13 @@
                         taskValue = document.getElementById('task').value;
                         label.innerHTML = taskValue;
                         label.style = "margin-top: 10pt; padding: 10pt;"
+                        label.id=removeWhitespace(taskValue)
                         deleteButton.className="fas fa-trash";
                         deleteButton.type="button";
-                        deleteButton.onclick="deleteTask()"
+                        deleteButton.id=removeWhitespace(taskValue);
+                        
 
+                        node.id=removeWhitespace(taskValue)
                         node.appendChild(label);                              // Append the text to <li>
                         node.appendChild(deleteButton)
 
@@ -45,10 +51,16 @@
                         document.getElementById("task").value=""   
 
                         var currentTasks = document.getElementById("tasks").value;
-                        currentTasks = {currentTasks.concat("; ", taskValue, " *.*incomplete")}
+                        currentTasks = currentTasks.concat("; ", taskValue, " *.*incomplete")
                         document.getElementById("tasks").value=currentTasks
                         
                     }
+                    deleteTask = function() {
+                        console.log("delete function to be written")
+                        
+
+                    }
+                    
 
                 </script>
 
@@ -58,7 +70,7 @@
                     <button id="create" class="btn btn-primary" type="button" name="submit" onclick="createTask()">Add Task</button>
                 </span>
                 <ul id="todoList">
-                    {{!-- <li><text style="padding: 10pt;">Meet George</text><button type="button" id="delTask" class="" onclick="deleteTask()"><i class="fas fa-trash"></i></button></li> --}}
+
                 </ul>
                 <input type="text" id="tasks" name="tasks" value="" style="display: none;">
 
@@ -66,11 +78,6 @@
             </div>
         </div>
 
-
-
-
-
-        {{!-- Save button --}}
         <div class="row">
             <input type="submit" value="Save" class="btn">
             <a href="/schedule" class="btn orange">Cancel</a>

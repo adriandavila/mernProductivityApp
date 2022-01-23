@@ -1,12 +1,11 @@
-
-
-<h3>Create Daily Schedule</h3>
+<h3>Edit Daily Schedule</h3>
 <div class="row">
-    <form action="/schedule" method="POST" class="col s12">
+    <form action="/schedule/{{schedule._id}}" method="POST" class="col s12">
+        <input type="hidden" name="_method" value="PUT">
         {{!-- Inputting the date --}}
         <div class="row">
             <div class="input-field">
-                <input type="date" id="day" name="day" value="{{getDate day}}">
+                <input type="date" id="day" name="day" value="{{getDate schedule.day}}">
                 <label for="day">Date</label>
             </div>
         </div>
@@ -24,32 +23,96 @@
             </div>
         </div>
 
+        {{!-- <input type="text" id="tasks-to-delete" name="tasks-to-delete" value="" style="display: none;"> --}}
+
         {{!-- Tasks --}}
         {{#if schedule.tasks}}
             {{#each schedule.tasks}}
-                <div class="row">
+                <div class="row" id="row-{{removeWhitespace task}}">
                     <div class="card" style="margin: 0px !important;">
                         <div class="card-content" style="padding: 15px 20px !important; display: flex;">
-                            <div class="task" style="flex-grow: 1;">
+                            <div class="task" id="task" style="flex-grow: 1;">
                                 <script>
                                     checkTask = function(noWsTask, task){
                                         console.log("Checking task: ", task)
                                         cbox = document.getElementById('btn-'.concat(noWsTask))
                                         txt = document.getElementById('txt-'.concat(noWsTask))
 
+                                        var tskList = document.getElementById('tasks').value.split("; ")
+                                        tskList = tskList.map(function(tsk){
+                                           return tsk.split("*.*")
+                                        })
+                                        
+                                        tskList.pop()
+                                        tskList = tskList.map(function(tsk){
+                                            return {
+                                                task: tsk[0],
+                                                status: tsk[1]
+                                            }
+                                        })
+
                                         if(cbox.checked) {
                                             txt.style="text-decoration: line-through;"
-                                            
+                                            tskList.forEach(tsk => {
+                                                if(tsk.task == task) {
+                                                    tsk.status = 'complete'
+                                                }
+                                            })
                                         } else {
                                             txt.style="color: #404040; text-decoration: none;"
-
+                                            tskList.forEach(tsk => {
+                                                if(tsk.task == task) {
+                                                    tsk.status = 'incomplete'
+                                                }
+                                            })
                                         }
+
+
+                                        taskList = tskList.map(function(element)  {
+                                            return element.task.concat("*.*", element.status, "; ")
+                                        })
+                                        var s = taskList.join('')
+                                        console.log("S: ", s)
+                                        document.getElementById('tasks').value=s
+                                        
                                     }
-                                    trash = function(task) {
+                                    trash = function(task, noWsTask) {
                                         console.log("Trashing: ", task)
+                                        var myobj = document.getElementById("row-".concat(noWsTask));
+                                        myobj.remove();
+
+                                        var tskList = document.getElementById('tasks').value.split("; ")
+                                        tskList = tskList.map(function(tsk){
+                                           return tsk.split("*.*")
+                                        })
+                                        
+                                        tskList.pop()
+                                        tskList = tskList.map(function(tsk){
+                                            return {
+                                                task: tsk[0],
+                                                status: tsk[1]
+                                            }
+                                        })
+
+                                        // FUNCTIONALITY HERE
+                                        var updatedList = []
+                                        tskList.forEach(tsk => {
+                                            if(tsk.task != task) {
+                                                updatedList.push(tsk)
+                                            }
+                                        })
+
+                                        updatedList = updatedList.map(function(element)  {
+                                            return element.task.concat("*.*", element.status, "; ")
+                                        })
+                                        var s = updatedList.join('')
+                                        console.log("S: ", s)
+                                        document.getElementById('tasks').value=s
+                                        
                                     }
+
                                 </script>
-                                <label>
+                                <label id="lbl-{{removeWhitespace task}}">
                                     {{#if (isComplete status)}}
                                         <input type="checkbox" checked="checked" id="btn-{{removeWhitespace task}}" onChange="checkTask('{{removeWhitespace task}}', '{{task}}')"/>
                                         <span style="text-decoration: line-through;" id="txt-{{removeWhitespace task}}">{{task}}</span>
@@ -61,19 +124,19 @@
                                 
                             </div> 
                             <div class="trash" style="">
-                                <i class="fas fa-trash" style="color: #0492C2; cursor: pointer;" onClick="trash('{{task}}')"></i>
+                                <i class="fas fa-trash" style="color: #0492C2; cursor: pointer;" onClick="trash('{{task}}', '{{removeWhitespace task}}')"></i>
                             </div>
                         </div>
                         
                     </div>
-                    
-                    
+  
                 </div>
             {{/each}}
         {{else}}
         <p>No tasks to display</p>
         {{/if}}
 
+        <input type="text" id="tasks" name="tasks" value="{{parseTasks schedule.tasks}}" style="display: none;">
 
         {{!-- Save button --}}
         <div class="row">
