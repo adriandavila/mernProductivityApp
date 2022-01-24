@@ -72,20 +72,17 @@ router.get('/edit/:id', ensureAuth, async (req, res) => {
         if (schedule.user != req.user.id) {
             res.redirect('/')
         } else {
-            //console.log(schedule.tasks)
             // schedule.tasks = schedule.tasks.map(function(tsk){
             //     return {
             //         task: tsk[0],
             //         status: tsk[1]
             //     }
             // })
-            //console.log(schedule.tasks)
 
             res.render('schedules/edit', {
                 schedule
             })
         }
-
 
     } catch (err) {
         console.error(err)
@@ -97,42 +94,58 @@ router.get('/edit/:id', ensureAuth, async (req, res) => {
 // @desc    Update schedule
 // @route   PUT /schedule/:id
 router.put('/:id', ensureAuth, async (req, res) => {
-    let schedule = await Schedule.findById(req.params.id).lean()
-
-    if(!schedule){
-        return res.render('error/404')
-    }
-
-    if (schedule.user != req.user.id) {
-        res.redirect('/')
-    } else {
-        console.log(req.body)
-        var tasks = req.body.tasks.split("; ")
-        if(tasks.at(-1) == '') {
-            tasks.pop()
-        }
+    try {
         
-        tasks = tasks.map(function(tsk){
-            return tsk.split("*.*")
-        })
-        tasks = tasks.map(function(tsk){
-            return {
-                task: tsk[0],
-                status: tsk[1]
+        let schedule = await Schedule.findById(req.params.id).lean()
+
+        if(!schedule){
+            return res.render('error/404')
+        }
+
+        if (schedule.user != req.user.id) {
+            res.redirect('/')
+        } else {
+            console.log(req.body)
+            var tasks = req.body.tasks.split("; ")
+            if(tasks.at(-1) == '') {
+                tasks.pop()
             }
-        })
-        console.log(tasks)
 
-        req.body.tasks = tasks
+            tasks = tasks.map(function(tsk){
+                return tsk.split("*.*")
+            })
+            tasks = tasks.map(function(tsk){
+                return {
+                    task: tsk[0],
+                    status: tsk[1]
+                }
+            })
 
-        schedule = await Schedule.findOneAndUpdate({ _id: req.params.id }, req.body, {
-            new: true,
-            runValidators: true,
-        })
+            req.body.tasks = tasks
 
-        res.redirect('/')
+            schedule = await Schedule.findOneAndUpdate({ _id: req.params.id }, req.body, {
+                new: true,
+                runValidators: true,
+            })
+
+            res.redirect('/schedule')
+        }
+    } catch (err) {
+        console.error(err)
+        return res.render('error/500')
     }
+})
 
+// @desc    Delete schedule
+// @route   DELETE /schedule/:id
+router.delete('/:id', ensureAuth, async (req, res) => {
+    try {
+        await Schedule.remove({ _id: req.params.id })
+        res.redirect('/archive')
+    } catch (err) {
+        console.error(err)
+        return res.render('error/500')
+    }
 })
 
 

@@ -18,7 +18,14 @@
                     <td><a href="/schedule/edit/{{_id}}">{{formatDate day 'MMMM Do YYYY'}}</a></td>
                     <td><span>{{quoteOfTheDay}}</span></td>
                     <td><span class="dash-status">{{status}}</span></td>
-                    <td></td>
+                    <td>
+                        <form action="/schedule/{{_id}}" method="POST" id="delete-form">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="trash" style="border: none; background: none;">
+                                <i class="fas fa-trash" style="color: #0492C2; cursor: pointer;"></i>
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             {{/each}}
         </tbody>
