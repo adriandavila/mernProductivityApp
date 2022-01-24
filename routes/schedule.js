@@ -108,7 +108,10 @@ router.put('/:id', ensureAuth, async (req, res) => {
     } else {
         console.log(req.body)
         var tasks = req.body.tasks.split("; ")
-        tasks.pop()
+        if(tasks.at(-1) == '') {
+            tasks.pop()
+        }
+        
         tasks = tasks.map(function(tsk){
             return tsk.split("*.*")
         })

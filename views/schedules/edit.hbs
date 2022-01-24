@@ -23,9 +23,17 @@
             </div>
         </div>
 
-        {{!-- <input type="text" id="tasks-to-delete" name="tasks-to-delete" value="" style="display: none;"> --}}
+        
+
+        {{!-- Add tasks --}}
+        <input type="text" class="form-control" placeholder="Enter here..." id="task" autofocus>
+        <span class="input-group-btn" >
+            <button id="create" class="btn" type="button" name="submit" onclick="createTask()" style="margin-bottom: 2em;">Add Task</button>
+        </span>
+
 
         {{!-- Tasks --}}
+        <div class="list-of-tasks" id="list-of-tasks">
         {{#if schedule.tasks}}
             {{#each schedule.tasks}}
                 <div class="row" id="row-{{removeWhitespace task}}">
@@ -33,17 +41,94 @@
                         <div class="card-content" style="padding: 15px 20px !important; display: flex;">
                             <div class="task" id="task" style="flex-grow: 1;">
                                 <script>
+                                    removeWhitespace = function(s) {
+                                        return s.replace(/\s+/g, '')
+                                    }
+
+                                    createTask = function() {
+                                        console.log("Creating task...")
+
+                                        taskValue = document.getElementById('task').value;
+                                        document.getElementById('task').value=""
+                                        
+                                        row = document.createElement("div")
+                                        row.classList.add("row")
+                                        row.id = "row-".concat(removeWhitespace(taskValue))
+
+                                        card = document.createElement("div")
+                                        card.classList.add("card")
+                                        card.style = "margin: 0px !important;"
+                                        
+                                        cardContent = document.createElement("div")
+                                        cardContent.classList.add("card-content")
+                                        cardContent.style="padding: 15px 20px !important; display: flex;"
+
+                                        task = document.createElement("div")
+                                        task.classList.add("task")
+                                        task.id="task"
+                                        task.style = "flex-grow: 1;"
+
+                                        label = document.createElement("label")
+                                        label.id = "lbl-".concat(removeWhitespace(taskValue))
+
+                                        input = document.createElement("input")
+                                        input.type="checkbox"
+                                        input.id="btn-".concat(removeWhitespace(taskValue))
+                                        input.setAttribute("onclick",`checkTask('${removeWhitespace(taskValue)}', '${taskValue} ')`)
+
+                                        span = document.createElement("span")
+                                        span.id = "txt-".concat(removeWhitespace(taskValue))
+                                        span.style = "color: black; text-decoration: none;"
+                                        span.innerHTML = taskValue
+
+                                        trashdiv = document.createElement("div")
+                                        trashdiv.classList.add("trash")
+
+                                        trashImg = document.createElement("i")
+                                        trashImg.classList.add("fas")
+                                        trashImg.classList.add("fa-trash")
+                                        trashImg.style = "color: #0492C2; cursor: pointer;"
+                                        trashImg.setAttribute("onClick",`trash('${taskValue} ', '${removeWhitespace(taskValue)}')`)
+
+                                        trashdiv.appendChild(trashImg)
+
+
+
+                                        label.appendChild(input)
+                                        label.appendChild(span)
+                                        task.appendChild(label)
+                                        cardContent.appendChild(task)
+                                        cardContent.appendChild(trashdiv)
+                                        card.appendChild(cardContent)
+                                        row.appendChild(card)
+
+                                        lst_of_tasks = document.getElementById('list-of-tasks')
+                                        lst_of_tasks.appendChild(row)
+
+                                        tasksExporter = document.getElementById("tasks")
+                                        //console.log("; ".concat(taskValue, " *.*incomplete"))
+                                        tasksExporter.value = tasksExporter.value.concat(taskValue, " *.*incomplete")
+                                        console.log(tasksExporter.value)
+                                    }
+
                                     checkTask = function(noWsTask, task){
                                         console.log("Checking task: ", task)
                                         cbox = document.getElementById('btn-'.concat(noWsTask))
                                         txt = document.getElementById('txt-'.concat(noWsTask))
 
                                         var tskList = document.getElementById('tasks').value.split("; ")
+                                        
                                         tskList = tskList.map(function(tsk){
                                            return tsk.split("*.*")
                                         })
                                         
-                                        tskList.pop()
+
+                                        if(tskList.at(-1) == '') {
+                                            tskList.pop()
+                                        }
+
+                                        //console.log(tskList)
+
                                         tskList = tskList.map(function(tsk){
                                             return {
                                                 task: tsk[0],
@@ -70,6 +155,7 @@
                                         taskList = tskList.map(function(element)  {
                                             return element.task.concat("*.*", element.status, "; ")
                                         })
+
                                         var s = taskList.join('')
                                         console.log("S: ", s)
                                         document.getElementById('tasks').value=s
@@ -132,6 +218,9 @@
         {{else}}
         <p>No tasks to display</p>
         {{/if}}
+        </div>
+        
+
 
         <input type="text" id="tasks" name="tasks" value="{{parseTasks schedule.tasks}}" style="display: none;">
 
