@@ -81,6 +81,11 @@
                                         span.style = "color: black; text-decoration: none;"
                                         span.innerHTML = taskValue
 
+
+                                        buttons = document.createElement("div")
+                                        buttons.classList.add("buttons")
+                                        buttons.style = "display: flex;"
+
                                         trashdiv = document.createElement("div")
                                         trashdiv.classList.add("trash")
 
@@ -91,14 +96,30 @@
                                         trashImg.setAttribute("onClick",`trash('${taskValue} ', '${removeWhitespace(taskValue)}')`)
 
                                         trashdiv.appendChild(trashImg)
+                                        
 
+                                        calendardiv = document.createElement("div")
+                                        calendardiv.classList.add("calendar")
 
+                                        calendarLink = document.createElement("a")
+                                        calendarLink.href = "https://calendar.google.com/calendar/u/0/r/eventedit"
+                                        calendarLink.target="_blank"
+
+                                        calendarImg = document.createElement("i")
+                                        calendarImg.classList.add("fas")
+                                        calendarImg.classList.add("fa-calendar")
+                                        calendarImg.style = style="flex: 1; color: #0492C2; cursor: pointer; margin-right: 8px;"
+
+                                        calendarLink.appendChild(calendarImg)
+                                        calendardiv.appendChild(calendarLink)
+                                        buttons.appendChild(calendardiv)
+                                        buttons.appendChild(trashdiv)
 
                                         label.appendChild(input)
                                         label.appendChild(span)
                                         task.appendChild(label)
                                         cardContent.appendChild(task)
-                                        cardContent.appendChild(trashdiv)
+                                        cardContent.appendChild(buttons)
                                         card.appendChild(cardContent)
                                         row.appendChild(card)
 
@@ -206,9 +227,16 @@
                                 </label>
                                 
                             </div> 
-                            <div class="trash" style="">
-                                <i class="fas fa-trash" style="color: #0492C2; cursor: pointer;" onClick="trash('{{task}}', '{{removeWhitespace task}}')"></i>
+                            <div class="buttons" style="display: flex;">
+                                <div class="calendar">
+                                    <a href="https://calendar.google.com/calendar/u/0/r/eventedit" target="_blank"><i class="fas fa-calendar" style="flex: 1; color: #0492C2; cursor: pointer; margin-right: 8px;"></i></a>
+                                </div>
+                                <div class="trash" style="">
+                                    <i class="fas fa-trash" style="color: #0492C2; cursor: pointer;" onClick="trash('{{task}}', '{{removeWhitespace task}}')"></i>
+                                </div>
                             </div>
+                            
+
                         </div>
                         
                     </div>
